@@ -10,9 +10,5 @@ def test():
     return {"message": "Hello there!"}
 
 @app.post("/polls/create")
-def create_poll():
-    try:
-        poll = Poll(options=["First", "Second", "Third"])
-        return poll
-    except ValidationError as e:
-        return e
+def create_poll(poll: Poll) -> Poll:
+    return poll
