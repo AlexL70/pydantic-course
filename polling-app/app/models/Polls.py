@@ -17,6 +17,16 @@ class PollCreate(BaseModel):
             raise ValueError("A poll must contain from 2 to 5 options.")
         return v
 
+    def create_poll(self) -> "Poll":
+        """Create a new poll instance with auto-incrementing labels for choices""" 
+        choices = [Choice(description=o, label=index+1) for index, o in
+            enumerate(self.option)
+        ]
+        if self.expires_at is not None and self.expires_at <= datetime.now(timezone.utc):
+            raise ValueError("Expiration date must be in the future.")
+
+        return Poll(options=choices, title=self.title, expires_at=self.expires_at)
+
 class Poll(PollCreate):
     """Poll data model"""
     id: UUID = Field(default_factory=uuid4)
