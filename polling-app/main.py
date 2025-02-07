@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from pydantic import ValidationError
-from app.models.Polls import Poll
-from typing import List
+from app.models.Polls import Poll, PollCreate
 
 app = FastAPI()
 
@@ -10,5 +9,6 @@ def test():
     return {"message": "Hello there!"}
 
 @app.post("/polls/create")
-def create_poll(poll: Poll) -> Poll:
-    return poll
+def create_poll(poll: PollCreate) -> Poll:
+    return Poll(title=poll.title,
+                options=["first", "second"])

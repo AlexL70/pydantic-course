@@ -1,14 +1,21 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from uuid import UUID, uuid4
 from typing import List, Optional
 from datetime import datetime, timezone
-from Choice import Choice
+from app.models.Choice import Choice
 
 class PollCreate(BaseModel):
     """Poll creating data model"""
     title: str = Field(min_length=5, max_length=50)
     options: List[str]
     expires_at: Optional[datetime] = None
+
+    @field_validator("options", mode="after")
+    @classmethod
+    def validate_options(cls, v: List[str]) -> List[str]:
+        if len(v) < 2 or len(v) > 5:
+            raise ValueError("A poll must contain from 2 to 5 options.")
+        return v
 
 class Poll(PollCreate):
     """Poll data model"""
