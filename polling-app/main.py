@@ -19,29 +19,3 @@ def create_poll(poll: PollCreate):
         }
     except ValidationError as e:
         return e
-
-        
-### explore and throw away ###
-from redis import Redis
-from dotenv import load_dotenv
-import os
-
-load_dotenv()
-
-redis_client = Redis(
-    host = os.getenv("REDIS_HOST"),
-    port = os.getenv("REDIS_PORT"),
-    password = os.getenv("REDIS_PASSWORD"),
-    db = os.getenv("REDIS_DB")
-)
-redis_client.ping()
-
-@app.post("/redis/save")
-def save_redis(id: str, name: str):
-    redis_client.set(id, name)
-    return {"status": "success"}
-
-@app.get("/redis/get/{id}")
-def retrieve_redis(id: str):
-    result = redis_client.get(id)
-    return {"result": result}
