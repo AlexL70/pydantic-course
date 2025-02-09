@@ -23,11 +23,16 @@ def create_poll(poll: PollCreate):
         
 ### explore and throw away ###
 from redis import Redis
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
 redis_client = Redis(
-    host = "127.0.0.1",
-    port = 6379,
-    password = "",
-    db = 0
+    host = os.getenv("REDIS_HOST"),
+    port = os.getenv("REDIS_PORT"),
+    password = os.getenv("REDIS_PASSWORD"),
+    db = os.getenv("REDIS_DB")
 )
 redis_client.ping()
 
