@@ -1,6 +1,7 @@
 from fastapi import FastAPI, status
 from pydantic import ValidationError
-from app.models.Polls import PollCreate
+from app.models.Polls import PollCreate, Poll
+from app.services import utils
 
 app = FastAPI()
 
@@ -9,13 +10,10 @@ def test():
     return {"message": "Hello there!"}
 
 @app.post("/polls/create", status_code=status.HTTP_201_CREATED)
-def create_poll(poll: PollCreate):
+def create_poll(poll: PollCreate) -> Poll:
     try:
         created = poll.create_poll()
-        return {
-            "detail": "Poll successfully created",
-            "poll_id": created.id,
-            "poll": created
-        }
+        utils.save_poll(created)
+        return created
     except ValidationError as e:
         return e
