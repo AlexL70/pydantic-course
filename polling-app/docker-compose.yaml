@@ -1,0 +1,14 @@
+services:
+  redis:
+    image: redis:7.4.1-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    # Configure Redis eviction policy to act as LRU cache
+    command: [ "redis-server", "--maxmemory", "50mb", "--maxmemory-policy", "allkeys-lru" ]
+    volumes:
+      - redis-data:/redis-data
+
+volumes:
+  redis-data:
+    driver: local
