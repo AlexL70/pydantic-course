@@ -1,9 +1,16 @@
 from fastapi import FastAPI
 from app.api.polls import router as polls_router
 
-app = FastAPI()
-app.include_router(polls_router, prefix="/polls", tags=["Polls CRUD"])
+app = FastAPI(
+    title="Polls API",
+    description="A simple API to create and vote on polls.",
+    version="0.1",
+    openapi_tags=[
+        {
+            "name": "Polls",
+            "description": "Operations related to creating and viewing polls." 
+        }
+    ]
+)
 
-@app.get("/test")
-def test():
-    return {"message": "Hello there!"}
+app.include_router(polls_router, prefix="/polls", tags=["Polls"])

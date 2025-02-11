@@ -1,4 +1,4 @@
-from fastapi import FastAPI, status, Response, HTTPException, APIRouter
+from fastapi import status, Response, HTTPException, APIRouter
 from pydantic import ValidationError
 from typing import Optional
 from uuid import UUID
