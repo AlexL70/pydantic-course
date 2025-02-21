@@ -1,6 +1,6 @@
 from app.models.Polls import Poll
-from redis import Redis
 from dotenv import load_dotenv
+from redis import Redis
 from uuid import UUID
 from typing import Optional
 import os
@@ -26,3 +26,13 @@ def retrieve_poll(poll_id: UUID) -> Optional[Poll]:
         poll = Poll.model_validate_json(poll_json)
         return poll
     return None
+
+def choice_label_to_uuid(poll_id: UUID, label: int) -> Optional[UUID]:
+    poll = retrieve_poll(poll_id=poll_id)
+    if not poll:
+        return None
+    for choice in poll.options:
+        if choice.label == label:
+            return choice.id
+
+    return None 
